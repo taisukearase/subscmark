@@ -23,11 +23,12 @@ const useStyles = makeStyles({
 type ContentProps = {
   title: string
   url: string
+  onModalOpen: (() => void)
 }
 
 const LinkCard: React.FC<ContentProps> = props => {
   const classes = useStyles()
-  const { url, title } = props
+  const { url, title, onModalOpen } = props
   return (
     <Card className={classes.card}>
       <CardActionArea
@@ -46,9 +47,8 @@ const LinkCard: React.FC<ContentProps> = props => {
       </CardActionArea>
       <CardActionArea
         className={classes.editButton}
-        onClick={() => {
-          console.log('fuga')
-        }}>
+        onClick={() => { onModalOpen() }}
+      >
         <EditIcon />
       </CardActionArea>
     </Card>

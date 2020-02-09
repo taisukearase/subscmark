@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import Link from '@material-ui/core/Link'
 import NavBar from './components/NavBar'
+import Modal from './components/Modal'
 import LinkCard from './components/LinkCard'
 
 function Copyright() {
@@ -20,6 +21,15 @@ function Copyright() {
 }
 
 export default function App() {
+  const [open, setOpen] = useState(false)
+
+  const onModalOpen = () => {
+    setOpen(true)
+  }
+
+  const onModalClose = () => {
+    setOpen(false)
+  }
   interface BookMark {
     id: number
     title: string
@@ -46,9 +56,10 @@ export default function App() {
 
   const list = data.map(data => (
     <Box mb={4} key={data.id}>
-      <LinkCard url={data.url} title={data.title} key={data.id} />
+      <LinkCard url={data.url} title={data.title} key={data.id} onModalOpen={onModalOpen}/>
     </Box>
   ))
+
 
   return (
     <React.Fragment>
@@ -59,6 +70,7 @@ export default function App() {
           <Copyright />
         </Box>
       </Container>
+      <Modal isOpen={open} onModalClose={onModalClose}/>
     </React.Fragment>
   )
 }

@@ -22,33 +22,26 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type ContentProps = {
   isOpen: boolean
+  onModalClose: (() => void)
 }
 
 const TransitionsModal: React.FC<ContentProps> = props => {
   const classes = useStyles()
-  const [open, setOpen] = React.useState(false)
-
-  const handleOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
+  const { isOpen, onModalClose } = props
 
   return (
     <Modal
       aria-labelledby='transition-modal-title'
       aria-describedby='transition-modal-description'
       className={classes.modal}
-      open={open}
-      onClose={handleClose}
+      open={isOpen}
+      onClose={onModalClose}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
         timeout: 500
       }}>
-      <Fade in={open}>
+      <Fade in={isOpen}>
         <div className={classes.paper}>
           <h2 id='transition-modal-title'>Transition modal</h2>
           <p id='transition-modal-description'>
