@@ -23,12 +23,12 @@ const useStyles = makeStyles({
 type ContentProps = {
   title: string
   url: string
-  onModalOpen: (() => void)
+  onFormOpen: () => void
 }
 
 const LinkCard: React.FC<ContentProps> = props => {
   const classes = useStyles()
-  const { url, title, onModalOpen } = props
+  const { url, title, onFormOpen } = props
   return (
     <Card className={classes.card}>
       <CardActionArea
@@ -40,15 +40,20 @@ const LinkCard: React.FC<ContentProps> = props => {
           <Typography gutterBottom variant='body2' component='h2' noWrap={true}>
             {title}
           </Typography>
-          <Typography variant='body2' color='textSecondary' component='p' noWrap={true}>
+          <Typography
+            variant='body2'
+            color='textSecondary'
+            component='p'
+            noWrap={true}>
             {url}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActionArea
         className={classes.editButton}
-        onClick={() => { onModalOpen() }}
-      >
+        onClick={() => {
+          onFormOpen()
+        }}>
         <EditIcon />
       </CardActionArea>
     </Card>
