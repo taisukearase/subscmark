@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import CloseIcon from '@material-ui/icons/Close'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import {
@@ -18,8 +18,17 @@ import {
   Input
 } from '@material-ui/core'
 
+interface BookMark {
+  id: number
+  title: string
+  url: string
+  type: string
+  date?: string[] | number[] | string
+}
+
 type ContentProps = {
   isOpen: boolean
+  object?: BookMark
   onFormClose: () => void
 }
 
@@ -57,10 +66,11 @@ const MenuProps = {
 }
 
 interface formData {
+  id?: number | null
   title: string
   url: string
   type: string
-  date: string[]
+  date?: string[] | number[] | string
 }
 
 const defaultValue: formData = {
@@ -72,9 +82,18 @@ const defaultValue: formData = {
 
 const FormDialog: React.FC<ContentProps> = props => {
   const classes = useStyles()
-  const { isOpen, onFormClose } = props
+  const { isOpen, object, onFormClose } = props
 
   const [{ title, url, date, type }, setState] = useState(defaultValue)
+
+  useEffect(() => {
+    setState(() => ({
+      title: object?.title ?? '',
+      url: object?.url ?? '',
+      type: object?.type ?? '',
+      date: object?.date ?? [],
+    }))
+  }, [object]);
 
   const onChange = (
     e: React.ChangeEvent<{ name?: string; value: unknown }>
@@ -193,6 +212,7 @@ const FormDialog: React.FC<ContentProps> = props => {
             id='title'
             name='title'
             label='タイトル'
+            value={title}
             onChange={onChange}
             type='text'
             fullWidth
@@ -201,6 +221,7 @@ const FormDialog: React.FC<ContentProps> = props => {
             margin='dense'
             id='url'
             name='url'
+            value={url}
             label='URL'
             type='text'
             onChange={onChange}

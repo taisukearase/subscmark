@@ -22,40 +22,45 @@ const useStyles = makeStyles({
   }
 })
 
-type ContentProps = {
+interface BookMark {
+  id: number
   title: string
   url: string
-  onFormOpen: () => void
+  type: string
+  date?: string[] | number[] | string
+}
+
+type ContentProps = {
+  object: BookMark
+  onFormOpen: (object: BookMark) => void
 }
 
 const LinkCard: React.FC<ContentProps> = props => {
   const classes = useStyles()
-  const { url, title, onFormOpen } = props
+  const { object, onFormOpen } = props
   return (
     <Card className={classes.card}>
       <CardActionArea
         className={classes.title}
         onClick={() => {
-          window.open(url)
+          window.open(object.url)
         }}>
         <CardContent>
           <Typography variant='body2' component='h2' gutterBottom noWrap>
-            {title}
+            {object.title}
           </Typography>
           <Typography
             variant='body2'
             color='textSecondary'
             component='p'
             noWrap>
-            {url}
+            {object.url}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActionArea
         className={classes.editButton}
-        onClick={() => {
-          onFormOpen()
-        }}>
+        onClick={() => { onFormOpen(object) }}>
         <EditIcon />
       </CardActionArea>
     </Card>

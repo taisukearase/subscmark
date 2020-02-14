@@ -30,8 +30,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function App() {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
+  const [object, setObject] = useState<BookMark | undefined>(undefined)
 
-  const onFormOpen = () => {
+  const onFormOpen = (object?: BookMark) => {
+    setObject(object)
     setOpen(true)
   }
 
@@ -42,33 +44,39 @@ export default function App() {
     id: number
     title: string
     url: string
+    type: string
+    date?: string[] | number[] | string
   }
 
   const data: BookMark[] = [
     {
       id: 1,
       title: '無印良品',
-      url: 'https://www.muji.com/jp/ja/store'
+      url: 'https://www.muji.com/jp/ja/store',
+      type: 'day',
     },
     {
       id: 2,
       title: 'ユニクロ',
-      url: 'https://www.uniqlo.com/jp/'
+      url: 'https://www.uniqlo.com/jp/',
+      type: 'week',
+      date: ['mon'],
     },
     {
       id: 3,
       title:
         'テストおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお',
       url:
-        'https://github.com/poipoisaurus/subscmark?hogehogehogehogehogehogehogehoge'
+        'https://github.com/poipoisaurus/subscmark?hogehogehogehogehogehogehogehoge',
+      type: 'month',
+      date: [1, 2]
     }
   ]
 
   const list = data.map(data => (
     <Box mb={4} key={data.id}>
       <LinkCard
-        url={data.url}
-        title={data.title}
+        object={data}
         key={data.id}
         onFormOpen={onFormOpen}
       />
@@ -88,10 +96,10 @@ export default function App() {
         color='primary'
         aria-label='add'
         className={classes.fab}
-        onClick={onFormOpen}>
+        onClick={() => { onFormOpen() }}>
         <AddIcon />
       </Fab>
-      <FormDialog isOpen={open} onFormClose={onFormClose} />
+      <FormDialog isOpen={open} onFormClose={onFormClose} object={object}/>
     </React.Fragment>
   )
 }
