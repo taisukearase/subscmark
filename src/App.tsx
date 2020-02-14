@@ -1,14 +1,10 @@
 import React, { useState } from 'react'
-import Container from '@material-ui/core/Container'
-import Typography from '@material-ui/core/Typography'
-import Box from '@material-ui/core/Box'
-import Link from '@material-ui/core/Link'
+import { Container, Typography, Box, Link, Fab } from '@material-ui/core'
+import { makeStyles, Theme } from '@material-ui/core/styles'
+import AddIcon from '@material-ui/icons/Add'
 import NavBar from './components/NavBar'
 import FormDialog from './components/FormDialog'
 import LinkCard from './components/LinkCard'
-import { Fab } from '@material-ui/core'
-import AddIcon from '@material-ui/icons/Add'
-import { makeStyles, Theme } from '@material-ui/core/styles'
 
 function Copyright() {
   return (
@@ -64,7 +60,7 @@ export default function App() {
       title:
         'テストおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお',
       url:
-        'https://github.com/pepaperonp/react-comm-modal?hogehogehogehogehogehogehogehoge'
+        'https://github.com/poipoisaurus/subscmark?hogehogehogehogehogehogehogehoge'
     }
   ]
 

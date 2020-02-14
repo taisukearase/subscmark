@@ -1,9 +1,11 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import Card from '@material-ui/core/Card'
-import CardActionArea from '@material-ui/core/CardActionArea'
-import CardContent from '@material-ui/core/CardContent'
-import Typography from '@material-ui/core/Typography'
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  Typography
+} from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
 
 const useStyles = makeStyles({
@@ -37,14 +39,14 @@ const LinkCard: React.FC<ContentProps> = props => {
           window.open(url)
         }}>
         <CardContent>
-          <Typography gutterBottom variant='body2' component='h2' noWrap={true}>
+          <Typography variant='body2' component='h2' gutterBottom noWrap>
             {title}
           </Typography>
           <Typography
             variant='body2'
             color='textSecondary'
             component='p'
-            noWrap={true}>
+            noWrap>
             {url}
           </Typography>
         </CardContent>
