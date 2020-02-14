@@ -5,6 +5,7 @@ import AddIcon from '@material-ui/icons/Add'
 import NavBar from './components/NavBar'
 import FormDialog from './components/FormDialog'
 import LinkCard from './components/LinkCard'
+import DeleteConfirm from './components/DeleteConfirm'
 
 function Copyright() {
   return (
@@ -19,6 +20,14 @@ function Copyright() {
   )
 }
 
+interface BookMark {
+  id: number
+  title: string
+  url: string
+  type: string
+  date?: string[] | number[] | string
+}
+
 const useStyles = makeStyles((theme: Theme) => ({
   fab: {
     position: 'absolute',
@@ -29,23 +38,23 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function App() {
   const classes = useStyles()
-  const [open, setOpen] = useState(false)
   const [object, setObject] = useState<BookMark | undefined>(undefined)
+  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState<boolean>(false)
 
   const onFormOpen = (object?: BookMark) => {
     setObject(object)
-    setOpen(true)
+    setIsFormOpen(true)
   }
-
   const onFormClose = () => {
-    setOpen(false)
+    setIsFormOpen(false)
   }
-  interface BookMark {
-    id: number
-    title: string
-    url: string
-    type: string
-    date?: string[] | number[] | string
+  const onDeleteConfirmOpen = (object?: BookMark) => {
+    setObject(object)
+    setIsDeleteConfirmOpen(true)
+  }
+  const onDeleteConfirmClose = () => {
+    setIsDeleteConfirmOpen(false)
   }
 
   const data: BookMark[] = [
@@ -53,14 +62,14 @@ export default function App() {
       id: 1,
       title: '無印良品',
       url: 'https://www.muji.com/jp/ja/store',
-      type: 'day',
+      type: 'day'
     },
     {
       id: 2,
       title: 'ユニクロ',
       url: 'https://www.uniqlo.com/jp/',
       type: 'week',
-      date: ['mon'],
+      date: ['mon']
     },
     {
       id: 3,
@@ -79,6 +88,7 @@ export default function App() {
         object={data}
         key={data.id}
         onFormOpen={onFormOpen}
+        onDeleteConfirmOpen={onDeleteConfirmOpen}
       />
     </Box>
   ))
@@ -96,10 +106,21 @@ export default function App() {
         color='primary'
         aria-label='add'
         className={classes.fab}
-        onClick={() => { onFormOpen() }}>
+        onClick={() => {
+          onFormOpen()
+        }}>
         <AddIcon />
       </Fab>
-      <FormDialog isOpen={open} onFormClose={onFormClose} object={object}/>
+      <FormDialog
+        isOpen={isFormOpen}
+        onFormClose={onFormClose}
+        object={object}
+      />
+      <DeleteConfirm
+        isOpen={isDeleteConfirmOpen}
+        onClose={onDeleteConfirmClose}
+        object={object}
+      />
     </React.Fragment>
   )
 }

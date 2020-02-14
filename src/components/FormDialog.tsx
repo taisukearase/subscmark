@@ -26,7 +26,7 @@ interface BookMark {
   date?: string[] | number[] | string
 }
 
-type ContentProps = {
+type Props = {
   isOpen: boolean
   object?: BookMark
   onFormClose: () => void
@@ -80,7 +80,7 @@ const defaultValue: formData = {
   date: []
 }
 
-const FormDialog: React.FC<ContentProps> = props => {
+const FormDialog: React.FC<Props> = props => {
   const classes = useStyles()
   const { isOpen, object, onFormClose } = props
 
@@ -91,9 +91,9 @@ const FormDialog: React.FC<ContentProps> = props => {
       title: object?.title ?? '',
       url: object?.url ?? '',
       type: object?.type ?? '',
-      date: object?.date ?? [],
+      date: object?.date ?? []
     }))
-  }, [object]);
+  }, [object])
 
   const onChange = (
     e: React.ChangeEvent<{ name?: string; value: unknown }>
@@ -157,7 +157,9 @@ const FormDialog: React.FC<ContentProps> = props => {
     }
     return (
       <FormControl className={classes.formControl}>
-        <InputLabel id='date_label'>{type === 'week' ? '曜日' : '日付'}</InputLabel>
+        <InputLabel id='date_label'>
+          {type === 'week' ? '曜日' : '日付'}
+        </InputLabel>
         <Select
           labelId='date_label'
           id='date'
@@ -193,10 +195,7 @@ const FormDialog: React.FC<ContentProps> = props => {
 
   return (
     <div className={classes.root}>
-      <Dialog
-        open={isOpen}
-        fullWidth
-        aria-labelledby='form-dialog-title'>
+      <Dialog open={isOpen} fullWidth aria-labelledby='form-dialog-title'>
         <DialogTitle id='form-dialog-title'>
           <IconButton
             aria-label='close'
