@@ -250,10 +250,11 @@ const FormDialog: React.FC<Props> = props => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color='secondary'>
-            Cancel
+            キャンセル
           </Button>
-          <Button onClick={onSubmit} color='primary'>
-            Subscribe
+          <div style={{ flex: '1 0 0' }} />
+          <Button onClick={onSubmit} color='primary' variant='contained'>
+            送信
           </Button>
         </DialogActions>
       </Dialog>
