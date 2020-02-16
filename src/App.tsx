@@ -25,7 +25,8 @@ interface BookMark {
   title: string
   url: string
   type: string
-  date?: string[] | number[] | string
+  date?: number[]
+  lastReadDay?: string
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -62,14 +63,16 @@ export default function App() {
       id: 1,
       title: '無印良品',
       url: 'https://www.muji.com/jp/ja/store',
-      type: 'day'
+      type: 'day',
+      lastReadDay: '2020-02-14 00:00'
     },
     {
       id: 2,
       title: 'ユニクロ',
       url: 'https://www.uniqlo.com/jp/',
       type: 'week',
-      date: ['mon']
+      date: [2],
+      lastReadDay: '2020-02-14 00:00'
     },
     {
       id: 3,
@@ -78,7 +81,8 @@ export default function App() {
       url:
         'https://github.com/poipoisaurus/subscmark?hogehogehogehogehogehogehogehoge',
       type: 'month',
-      date: [1, 2]
+      date: [1, 2, 14, 17],
+      lastReadDay: '2020-02-10 00:00'
     }
   ]
 

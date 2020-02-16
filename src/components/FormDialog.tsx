@@ -23,7 +23,8 @@ interface BookMark {
   title: string
   url: string
   type: string
-  date?: string[] | number[] | string
+  date?: number[]
+  lastReadDay?: string
 }
 
 type Props = {
@@ -70,7 +71,7 @@ interface formData {
   title: string
   url: string
   type: string
-  date?: string[] | number[] | string
+  date?: number[]
 }
 
 const defaultValue: formData = {
@@ -136,15 +137,11 @@ const FormDialog: React.FC<Props> = props => {
 
   const dateItems: dateItem[] =
     type === 'week'
-      ? [
-          { id: 1, label: '日', value: 'sun' },
-          { id: 2, label: '月', value: 'mon' },
-          { id: 3, label: '火', value: 'tue' },
-          { id: 4, label: '水', value: 'wed' },
-          { id: 5, label: '木', value: 'thu' },
-          { id: 6, label: '金', value: 'fri' },
-          { id: 7, label: '土', value: 'sat' }
-        ]
+      ? ['日', '月', '火', '水', '木', '金', '土'].map((label, i) => ({
+        id: i + 1,
+        label,
+        value: i
+      }))
       : [...Array(31)].map((_, i) => ({
           id: i + 1,
           label: i + 1,

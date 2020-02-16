@@ -14,7 +14,8 @@ interface BookMark {
   title: string
   url: string
   type: string
-  date?: string[] | number[] | string
+  date?: number[]
+  lastReadDay?: string
 }
 
 type Props = {
