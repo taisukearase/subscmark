@@ -72,7 +72,7 @@ export default function App() {
       url: 'https://www.uniqlo.com/jp/',
       type: 'week',
       date: [2],
-      lastReadDay: '2020-02-14 00:00'
+      lastReadDay: '2020-01-10 00:00'
     },
     {
       id: 3,
