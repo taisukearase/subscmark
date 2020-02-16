@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   Card,
@@ -11,6 +11,9 @@ import {
 import EditIcon from '@material-ui/icons/Edit'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import DeleteIcon from '@material-ui/icons/Delete'
+
+import { isRead } from '../logic/Date'
+import { format } from 'date-fns'
 
 const useStyles = makeStyles({
   card: {
@@ -31,7 +34,8 @@ interface BookMark {
   title: string
   url: string
   type: string
-  date?: string[] | number[] | string
+  date?: number[]
+  lastReadDay?: string
 }
 
 type Props = {
@@ -47,22 +51,36 @@ const LinkCard: React.FC<Props> = props => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
-  const handleClose = () => {
+  const handleMenuClose = () => {
     setAnchorEl(null)
   }
+
+  // object のプロパティの変更を感知できない？ので代用
+  const [date, setDate] = useState(object.lastReadDay)
+
+  const handleLinkClick = () => {
+    setDate(format(
+      new Date(),
+      'yyyy-MM-dd HH:mm:ss'
+    ))
+    window.open(object.url)
+  }
+
+  const alert: string = useMemo(() => {
+    return isRead(date, object.type, object.date) ? '既読' : '未読'
+  }, [date, object.date, object.type])
 
   return (
     <Card className={classes.card}>
       <CardActionArea
         className={classes.title}
-        onClick={() => {
-          window.open(object.url)
-        }}>
+        onClick={handleLinkClick}>
         <CardContent>
           <Typography variant='body2' component='h2' gutterBottom noWrap>
+            {alert}
             {object.title}
           </Typography>
           <Typography
@@ -74,7 +92,7 @@ const LinkCard: React.FC<Props> = props => {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActionArea className={classes.editButton} onClick={handleClick}>
+      <CardActionArea className={classes.editButton} onClick={handleMenuClick}>
         <MoreVertIcon />
       </CardActionArea>
       <Menu
@@ -82,7 +100,7 @@ const LinkCard: React.FC<Props> = props => {
         anchorEl={anchorEl}
         keepMounted
         open={open}
-        onClose={handleClose}
+        onClose={handleMenuClose}
         PaperProps={{
           style: {
             maxHeight: 48 * 4.5,
@@ -91,14 +109,14 @@ const LinkCard: React.FC<Props> = props => {
         }}>
         <MenuItem
           onClick={() => {
-            handleClose()
+            handleMenuClose()
             onFormOpen(object)
           }}>
           <EditIcon />
         </MenuItem>
         <MenuItem
           onClick={() => {
-            handleClose()
+            handleMenuClose()
             onDeleteConfirmOpen(object)
           }}>
           <DeleteIcon />
