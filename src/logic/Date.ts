@@ -7,9 +7,9 @@ export const isRead = (lastReadDay?: string , type?: string, date?: number[]): b
     case 'day':
       return isAfter(lastReadDateTime, startOfDay(new Date()))
     case 'week':
-      return isAfter(lastReadDateTime, getPrevDate(getWeekDates(date)))
+      return isAfter(lastReadDateTime, startOfDay(getPrevDate(getWeekDates(date))))
     case 'month':
-      return isAfter(lastReadDateTime, getPrevDate(date))
+      return isAfter(lastReadDateTime, startOfDay(getPrevDate(date)))
     default:
       return false
   }
