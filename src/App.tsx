@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import { Container, Typography, Box, Link, Fab } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -39,15 +40,26 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function App() {
   const classes = useStyles()
+  const [objects, setObjects] = useState<BookMark[]>([])
   const [object, setObject] = useState<BookMark | undefined>(undefined)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState<boolean>(false)
 
+  useEffect(() => {
+    fetchBookMarks()
+  }, [])
+  
+  const fetchBookMarks = async () => {
+    const res = await axios.get('https://so88ofhp4e.execute-api.ap-northeast-1.amazonaws.com/bookmarks')
+    console.log(res.data.Items)
+    setObjects(res.data.Items)
+  }
   const onFormOpen = (object?: BookMark) => {
     setObject(object)
     setIsFormOpen(true)
   }
   const onFormClose = () => {
+    setObject(undefined)
     setIsFormOpen(false)
   }
   const onDeleteConfirmOpen = (object?: BookMark) => {
@@ -58,35 +70,7 @@ export default function App() {
     setIsDeleteConfirmOpen(false)
   }
 
-  const data: BookMark[] = [
-    {
-      id: 1,
-      title: '無印良品',
-      url: 'https://www.muji.com/jp/ja/store',
-      type: 'day',
-      lastReadDay: '2020-02-14 00:00'
-    },
-    {
-      id: 2,
-      title: 'ユニクロ',
-      url: 'https://www.uniqlo.com/jp/',
-      type: 'week',
-      date: [2],
-      lastReadDay: '2020-01-10 00:00'
-    },
-    {
-      id: 3,
-      title:
-        'テストおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお',
-      url:
-        'https://github.com/poipoisaurus/subscmark?hogehogehogehogehogehogehogehoge',
-      type: 'month',
-      date: [1, 2, 14, 17],
-      lastReadDay: '2020-02-10 00:00'
-    }
-  ]
-
-  const list = data.map(data => (
+  const list = objects.map(data => (
     <Box mb={4} key={data.id}>
       <LinkCard
         object={data}
