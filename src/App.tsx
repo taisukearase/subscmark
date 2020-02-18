@@ -1,25 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Container, Typography, Box, Link, Fab } from '@material-ui/core'
+import { Container, Box, Fab } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import NavBar from './components/NavBar'
 import FormDialog from './components/FormDialog'
 import LinkCard from './components/LinkCard'
 import DeleteConfirm from './components/DeleteConfirm'
-
-function Copyright() {
-  return (
-    <Typography variant='body2' color='textSecondary' align='center'>
-      {'Copyright © '}
-      <Link color='inherit' href='https://material-ui.com/'>
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  )
-}
+import Copyright from './components/Copyright'
 
 interface BookMark {
   id: number
