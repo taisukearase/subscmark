@@ -1,0 +1,42 @@
+{
+  "extends": [
+    "airbnb-base", //スタイルガイドがいらない場合や他を使う場合はここを書き換える
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint"
+  ],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  },
+  "rules": {
+    "@typescript-eslint/prefer-interface": "off",
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [".jsx", ".tsx"]
+      }
+    ],
+    "react/prop-types": "off",
+    "spaced-comment": [
+      "error",
+      "always",
+      {
+        "markers": ["/ <reference"]
+      }
+    ],
+    "@typescript-eslint/no-use-before-define": 0
+  }
+}

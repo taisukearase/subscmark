@@ -6,34 +6,26 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
 } from '@material-ui/core'
-
-interface BookMark {
-  id: number
-  title: string
-  url: string
-  type: string
-  date?: number[]
-  lastReadDay?: string
-}
+import { Bookmark } from '../models'
 
 type Props = {
   isOpen: boolean
   onClose: () => void
-  object?: BookMark
+  object?: Bookmark
 }
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   leftAlignDialogActions: {
-    justifyContent: 'flex-start'
-  }
+    justifyContent: 'flex-start',
+  },
 }))
 
 const DeleteConfirm: React.FC<Props> = props => {
   const classes = useStyles()
   const { isOpen, onClose, object } = props
-  const onDelete = () => {
+  const onDelete = (): void => {
     // TODO 削除して再描画
     console.log(object)
     onClose()
@@ -43,23 +35,23 @@ const DeleteConfirm: React.FC<Props> = props => {
     <Dialog
       open={isOpen}
       onClose={onClose}
-      aria-labelledby='alert-dialog-title'
-      aria-describedby='alert-dialog-description'>
-      <DialogTitle id='alert-dialog-title'>ブックマークの削除</DialogTitle>
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description">
+      <DialogTitle id="alert-dialog-title">ブックマークの削除</DialogTitle>
       <DialogContent>
-        <DialogContentText id='alert-dialog-description'>
+        <DialogContentText id="alert-dialog-description">
           ブックマークを削除します。よろしいですか？
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button
           onClick={onClose}
-          color='primary'
+          color="primary"
           classes={{ root: classes.leftAlignDialogActions }}>
           キャンセル
         </Button>
         <div style={{ flex: '1 0 0' }} />
-        <Button onClick={onDelete} color='secondary' variant='contained'>
+        <Button onClick={onDelete} color="secondary" variant="contained">
           削除
         </Button>
       </DialogActions>

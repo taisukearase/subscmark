@@ -1,47 +1,34 @@
 import React, { useState, useMemo } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { Card, CardActionArea, CardContent, Typography, Menu, MenuItem } from '@material-ui/core'
 import {
-  Card,
-  CardActionArea,
-  CardContent,
-  Typography,
-  Menu,
-  MenuItem
-} from '@material-ui/core'
-import EditIcon from '@material-ui/icons/Edit'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
-import DeleteIcon from '@material-ui/icons/Delete'
+  Edit as EditIcon,
+  MoreVert as MoreVertIcon,
+  Delete as DeleteIcon,
+} from '@material-ui/icons'
 
-import { isRead } from '../logic/Date'
 import { format } from 'date-fns'
+import { Bookmark } from '../models'
+import { isRead } from '../logic/Date'
 
 const useStyles = makeStyles({
   card: {
-    display: 'flex'
+    display: 'flex',
   },
   title: {
-    maxWidth: '90%'
+    maxWidth: '90%',
   },
   editButton: {
     width: '10%',
     display: 'flex',
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 })
 
-interface BookMark {
-  id: number
-  title: string
-  url: string
-  type: string
-  date?: number[]
-  lastReadDay?: string
-}
-
 type Props = {
-  object: BookMark
-  onFormOpen: (object: BookMark) => void
-  onDeleteConfirmOpen: (object: BookMark) => void
+  object: Bookmark
+  onFormOpen: (object: Bookmark) => void
+  onDeleteConfirmOpen: (object: Bookmark) => void
 }
 
 const LinkCard: React.FC<Props> = props => {
@@ -51,38 +38,36 @@ const LinkCard: React.FC<Props> = props => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const isMenuOpen = Boolean(anchorEl)
 
-  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorEl(event.currentTarget)
   }
-  const handleMenuClose = () => {
+  const handleMenuClose = (): void => {
     setAnchorEl(null)
   }
 
   // object のプロパティの変更を感知できない？ので代用
   const [date, setDate] = useState(object.lastReadDay)
 
-  const handleLinkClick = () => {
+  const handleLinkClick = (): void => {
     setDate(format(new Date(), 'yyyy-MM-dd HH:mm:ss'))
     window.open(object.url)
   }
 
-  const alert: string = useMemo(() => {
-    return isRead(date, object.type, object.date) ? '既読' : '未読'
-  }, [date, object.date, object.type])
+  const alert: string = useMemo(() => (isRead(date, object.type, object.date) ? '既読' : '未読'), [
+    date,
+    object.date,
+    object.type,
+  ])
 
   return (
     <Card className={classes.card}>
       <CardActionArea className={classes.title} onClick={handleLinkClick}>
         <CardContent>
-          <Typography variant='body2' component='h2' gutterBottom noWrap>
+          <Typography variant="body2" component="h2" gutterBottom noWrap>
             {alert}
             {object.title}
           </Typography>
-          <Typography
-            variant='body2'
-            color='textSecondary'
-            component='p'
-            noWrap>
+          <Typography variant="body2" color="textSecondary" component="p" noWrap>
             {object.url}
           </Typography>
         </CardContent>
@@ -91,7 +76,7 @@ const LinkCard: React.FC<Props> = props => {
         <MoreVertIcon />
       </CardActionArea>
       <Menu
-        id='long-menu'
+        id="long-menu"
         anchorEl={anchorEl}
         keepMounted
         open={isMenuOpen}
@@ -99,18 +84,18 @@ const LinkCard: React.FC<Props> = props => {
         PaperProps={{
           style: {
             maxHeight: 48 * 4.5,
-            width: 'auto'
-          }
+            width: 'auto',
+          },
         }}>
         <MenuItem
-          onClick={() => {
+          onClick={(): void => {
             handleMenuClose()
             onFormOpen(object)
           }}>
           <EditIcon />
         </MenuItem>
         <MenuItem
-          onClick={() => {
+          onClick={(): void => {
             handleMenuClose()
             onDeleteConfirmOpen(object)
           }}>

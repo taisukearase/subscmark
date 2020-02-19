@@ -2,59 +2,52 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Container, Box, Fab } from '@material-ui/core'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import AddIcon from '@material-ui/icons/Add'
+import { Add as AddIcon } from '@material-ui/icons'
 import NavBar from './components/NavBar'
 import FormDialog from './components/FormDialog'
 import LinkCard from './components/LinkCard'
 import DeleteConfirm from './components/DeleteConfirm'
 import Copyright from './components/Copyright'
-
-interface BookMark {
-  id: number
-  title: string
-  url: string
-  type: string
-  date?: number[]
-  lastReadDay?: string
-}
+import { Bookmark } from './models'
 
 const useStyles = makeStyles((theme: Theme) => ({
   fab: {
     position: 'absolute',
     bottom: theme.spacing(2),
-    right: theme.spacing(2)
-  }
+    right: theme.spacing(2),
+  },
 }))
 
-export default function App() {
+export default function App(): JSX.Element {
   const classes = useStyles()
-  const [objects, setObjects] = useState<BookMark[]>([])
-  const [object, setObject] = useState<BookMark | undefined>(undefined)
+  const [objects, setObjects] = useState<Bookmark[]>([])
+  const [object, setObject] = useState<Bookmark | undefined>(undefined)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState<boolean>(false)
 
   useEffect(() => {
-    fetchBookMarks()
+    const fetchBookmarks = async (): Promise<void> => {
+      const res = await axios.get(
+        'https://so88ofhp4e.execute-api.ap-northeast-1.amazonaws.com/bookmarks'
+      )
+      setObjects(res.data.Items)
+    }
+    fetchBookmarks()
   }, [])
-  
-  const fetchBookMarks = async () => {
-    const res = await axios.get('https://so88ofhp4e.execute-api.ap-northeast-1.amazonaws.com/bookmarks')
-    console.log(res.data.Items)
-    setObjects(res.data.Items)
-  }
-  const onFormOpen = (object?: BookMark) => {
-    setObject(object)
+
+  const onFormOpen = (obj?: Bookmark): void => {
+    setObject(obj)
     setIsFormOpen(true)
   }
-  const onFormClose = () => {
+  const onFormClose = (): void => {
     setObject(undefined)
     setIsFormOpen(false)
   }
-  const onDeleteConfirmOpen = (object?: BookMark) => {
-    setObject(object)
+  const onDeleteConfirmOpen = (obj?: Bookmark): void => {
+    setObject(obj)
     setIsDeleteConfirmOpen(true)
   }
-  const onDeleteConfirmClose = () => {
+  const onDeleteConfirmClose = (): void => {
     setIsDeleteConfirmOpen(false)
   }
 
@@ -70,33 +63,25 @@ export default function App() {
   ))
 
   return (
-    <React.Fragment>
+    <>
       <NavBar />
-      <Container maxWidth='sm'>
+      <Container maxWidth="sm">
         <Box my={4}>
           {list}
           <Copyright />
         </Box>
       </Container>
       <Fab
-        color='primary'
-        aria-label='add'
+        color="primary"
+        aria-label="add"
         className={classes.fab}
-        onClick={() => {
+        onClick={(): void => {
           onFormOpen()
         }}>
         <AddIcon />
       </Fab>
-      <FormDialog
-        isOpen={isFormOpen}
-        onFormClose={onFormClose}
-        object={object}
-      />
-      <DeleteConfirm
-        isOpen={isDeleteConfirmOpen}
-        onClose={onDeleteConfirmClose}
-        object={object}
-      />
-    </React.Fragment>
+      <FormDialog isOpen={isFormOpen} onFormClose={onFormClose} object={object} />
+      <DeleteConfirm isOpen={isDeleteConfirmOpen} onClose={onDeleteConfirmClose} object={object} />
+    </>
   )
 }

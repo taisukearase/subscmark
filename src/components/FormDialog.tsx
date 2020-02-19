@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import CloseIcon from '@material-ui/icons/Close'
+import { Close as CloseIcon } from '@material-ui/icons'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import {
   MenuItem,
@@ -15,45 +15,37 @@ import {
   Button,
   IconButton,
   Chip,
-  Input
+  Input,
 } from '@material-ui/core'
-
-interface BookMark {
-  id: number
-  title: string
-  url: string
-  type: string
-  date?: number[]
-  lastReadDay?: string
-}
+import { Bookmark } from '../models'
 
 type Props = {
   isOpen: boolean
-  object?: BookMark
+  object?: Bookmark
   onFormClose: () => void
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   closeButton: {
     position: 'absolute',
     right: theme.spacing(1),
     top: theme.spacing(1),
-    color: theme.palette.grey[500]
+    color: theme.palette.grey[500],
   },
   formControl: {
     fullWidth: true,
-    display: 'flex'
+    display: 'flex',
   },
   chips: {
     display: 'flex',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   chip: {
-    margin: 2
-  }
+    margin: 2,
+  },
 }))
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -61,12 +53,12 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250
-    }
-  }
+      width: 250,
+    },
+  },
 }
 
-interface formData {
+interface FormData {
   id?: number | null
   title: string
   url: string
@@ -74,11 +66,11 @@ interface formData {
   date?: number[]
 }
 
-const defaultValue: formData = {
+const defaultValue: FormData = {
   title: '',
   url: '',
   type: '',
-  date: []
+  date: [],
 }
 
 const FormDialog: React.FC<Props> = props => {
@@ -92,13 +84,11 @@ const FormDialog: React.FC<Props> = props => {
       title: object?.title ?? '',
       url: object?.url ?? '',
       type: object?.type ?? '',
-      date: object?.date ?? []
+      date: object?.date ?? [],
     }))
   }, [object])
 
-  const onChange = (
-    e: React.ChangeEvent<{ name?: string; value: unknown }>
-  ) => {
+  const onChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>): void => {
     const { value } = e.target
     const name = e.target.name as string
 
@@ -108,74 +98,66 @@ const FormDialog: React.FC<Props> = props => {
     setState(prevState => ({ ...prevState, [name]: value }))
   }
 
-  const onSubmit = () => {
-    // TODO POST or PUT
-    console.log({
-      title,
-      url,
-      type,
-      date
-    })
-    handleClose()
-  }
-
-  const clearState = () => {
+  const clearState = (): void => {
     setState({ ...defaultValue })
   }
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     // 入力内容をクリアしてから閉じる
     clearState()
     onFormClose()
   }
 
-  interface dateItem {
+  const onSubmit = (): void => {
+    // TODO POST or PUT
+    console.log({
+      title,
+      url,
+      type,
+      date,
+    })
+    handleClose()
+  }
+
+  interface DateItem {
     id: number
     label: string | number
     value: string | number
   }
 
-  const dateItems: dateItem[] =
+  const dateItems: DateItem[] =
     type === 'week'
       ? ['日', '月', '火', '水', '木', '金', '土'].map((label, i) => ({
-        id: i + 1,
-        label,
-        value: i
-      }))
+          id: i + 1,
+          label,
+          value: i,
+        }))
       : [...Array(31)].map((_, i) => ({
           id: i + 1,
           label: i + 1,
-          value: i + 1
+          value: i + 1,
         }))
 
-  const DateSelector = () => {
+  const DateSelector = (): JSX.Element | null => {
     if (type !== 'week' && type !== 'month') {
       return null
     }
     return (
       <FormControl className={classes.formControl}>
-        <InputLabel id='date_label'>
-          {type === 'week' ? '曜日' : '日付'}
-        </InputLabel>
+        <InputLabel id="date_label">{type === 'week' ? '曜日' : '日付'}</InputLabel>
         <Select
-          labelId='date_label'
-          id='date'
+          labelId="date_label"
+          id="date"
           multiple
           value={date}
-          name='date'
+          name="date"
           onChange={onChange}
-          input={<Input id='select-multi-chip' />}
-          renderValue={selected => (
+          input={<Input id="select-multi-chip" />}
+          renderValue={(selected): JSX.Element => (
             <div className={classes.chips}>
               {(selected as string[]).map(value => {
-                const item = dateItems.find(item => item.value === value)
-                return (
-                  <Chip
-                    key={value}
-                    label={item?.label}
-                    className={classes.chip}
-                  />
-                )
+                const selectedItem = dateItems.find(item => item.value === value)
+                return <Chip key={value} label={selectedItem?.label} className={classes.chip} />
               })}
             </div>
           )}
@@ -192,51 +174,48 @@ const FormDialog: React.FC<Props> = props => {
 
   return (
     <div className={classes.root}>
-      <Dialog open={isOpen} fullWidth aria-labelledby='form-dialog-title'>
-        <DialogTitle id='form-dialog-title'>
-          <IconButton
-            aria-label='close'
-            className={classes.closeButton}
-            onClick={handleClose}>
+      <Dialog open={isOpen} fullWidth aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">
+          <IconButton aria-label="close" className={classes.closeButton} onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
-            margin='dense'
-            id='title'
-            name='title'
-            label='タイトル'
+            margin="dense"
+            id="title"
+            name="title"
+            label="タイトル"
             value={title}
             onChange={onChange}
-            type='text'
+            type="text"
             fullWidth
           />
           <TextField
-            margin='dense'
-            id='url'
-            name='url'
+            margin="dense"
+            id="url"
+            name="url"
             value={url}
-            label='URL'
-            type='text'
+            label="URL"
+            type="text"
             onChange={onChange}
             fullWidth
           />
           <Grid container spacing={3}>
             <Grid item xs={6} sm={6}>
               <FormControl className={classes.formControl}>
-                <InputLabel id='type_label'>タイプ</InputLabel>
+                <InputLabel id="type_label">タイプ</InputLabel>
                 <Select
-                  labelId='type'
-                  id='type'
-                  name='type'
+                  labelId="type"
+                  id="type"
+                  name="type"
                   value={type}
                   onChange={onChange}
                   autoWidth>
-                  <MenuItem value='day'>毎日</MenuItem>
-                  <MenuItem value='week'>毎週</MenuItem>
-                  <MenuItem value='month'>毎月</MenuItem>
+                  <MenuItem value="day">毎日</MenuItem>
+                  <MenuItem value="week">毎週</MenuItem>
+                  <MenuItem value="month">毎月</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -246,11 +225,11 @@ const FormDialog: React.FC<Props> = props => {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color='secondary'>
+          <Button onClick={handleClose} color="secondary">
             キャンセル
           </Button>
           <div style={{ flex: '1 0 0' }} />
-          <Button onClick={onSubmit} color='primary' variant='contained'>
+          <Button onClick={onSubmit} color="primary" variant="contained">
             送信
           </Button>
         </DialogActions>
