@@ -1,38 +1,43 @@
-import { getDate, setDate, subMonths, isAfter, startOfDay } from 'date-fns'
+import { setDate, subMonths, isAfter, startOfDay, subWeeks } from 'date-fns'
 
 export const isRead = (lastReadDay?: string, type?: string, date?: number[]): boolean => {
   if (lastReadDay === undefined) return false
   const lastReadDateTime = new Date(lastReadDay)
+  return isAfter(lastReadDateTime, startOfDay(getLatestSubscDate(type, date)))
+}
+
+const getLatestSubscDate = (type?: string, date?: number[]): Date => {
+  if (type === undefined || date === undefined) {
+    return new Date()
+  }
+
   switch (type) {
-    case 'day':
-      return isAfter(lastReadDateTime, startOfDay(new Date()))
     case 'week':
-      return isAfter(lastReadDateTime, startOfDay(getPrevDate(getWeekDates(date))))
+      return getWeekDate(date)
     case 'month':
-      return isAfter(lastReadDateTime, startOfDay(getPrevDate(date)))
+      return getMonthDate(date)
     default:
-      return false
+      return new Date()
   }
 }
 
-const getPrevDate = (date?: number[]): Date => {
-  if (date === undefined) {
-    throw Error
-  }
-  const today = getDate(new Date())
-  if (today < Math.min(...date)) {
-    return subMonths(setDate(new Date(), Math.max(...date)), 1)
-  }
-  const prevDate = date.reduce((acc, crr) => (acc < crr && crr <= today ? crr : acc))
-  return setDate(new Date(), prevDate)
-}
-
-const getWeekDates = (date?: number[]): number[] => {
-  if (date === undefined) {
-    throw Error
-  }
+const getMonthDate = (date: number[]): Date => {
   const today = new Date()
-  return date.map(day => today.getDate() - today.getDay() + day)
+  if (today.getDate() < Math.min(...date)) {
+    return subMonths(setDate(today, Math.max(...date)), 1)
+  }
+  const prevDate = date.reduce((acc, crr) => (acc < crr && crr <= today.getDate() ? crr : acc))
+  return setDate(today, prevDate)
+}
+
+const getWeekDate = (date: number[]): Date => {
+  const today = new Date()
+  const thisWeekDates = date.map(day => today.getDate() - today.getDay() + day)
+  if (today.getDate() < Math.min(...thisWeekDates)) {
+    return subWeeks(setDate(today, Math.max(...thisWeekDates)), 1)
+  }
+  const prevDate = date.reduce((acc, crr) => (acc < crr && crr <= today.getDate() ? crr : acc))
+  return setDate(today, prevDate)
 }
 
 export default null
