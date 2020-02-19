@@ -49,7 +49,7 @@ const LinkCard: React.FC<Props> = props => {
   const { object, onFormOpen, onDeleteConfirmOpen } = props
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
+  const isMenuOpen = Boolean(anchorEl)
 
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -62,10 +62,7 @@ const LinkCard: React.FC<Props> = props => {
   const [date, setDate] = useState(object.lastReadDay)
 
   const handleLinkClick = () => {
-    setDate(format(
-      new Date(),
-      'yyyy-MM-dd HH:mm:ss'
-    ))
+    setDate(format(new Date(), 'yyyy-MM-dd HH:mm:ss'))
     window.open(object.url)
   }
 
@@ -75,9 +72,7 @@ const LinkCard: React.FC<Props> = props => {
 
   return (
     <Card className={classes.card}>
-      <CardActionArea
-        className={classes.title}
-        onClick={handleLinkClick}>
+      <CardActionArea className={classes.title} onClick={handleLinkClick}>
         <CardContent>
           <Typography variant='body2' component='h2' gutterBottom noWrap>
             {alert}
@@ -99,7 +94,7 @@ const LinkCard: React.FC<Props> = props => {
         id='long-menu'
         anchorEl={anchorEl}
         keepMounted
-        open={open}
+        open={isMenuOpen}
         onClose={handleMenuClose}
         PaperProps={{
           style: {
