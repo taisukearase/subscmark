@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Container, Box, Fab } from '@material-ui/core'
+import { Skeleton } from '@material-ui/lab'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { Add as AddIcon } from '@material-ui/icons'
 import NavBar from './components/NavBar'
@@ -20,19 +21,22 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function App(): JSX.Element {
   const classes = useStyles()
+  const [isLoaded, setLoaded] = useState<boolean>(false)
   const [objects, setObjects] = useState<Bookmark[]>([])
   const [object, setObject] = useState<Bookmark | undefined>(undefined)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState<boolean>(false)
 
+  const fetchBookmarks = async (): Promise<void> => {
+    const res = await axios.get(
+      'https://so88ofhp4e.execute-api.ap-northeast-1.amazonaws.com/bookmarks'
+    )
+    setObjects(res.data.Items)
+  }
+
   useEffect(() => {
-    const fetchBookmarks = async (): Promise<void> => {
-      const res = await axios.get(
-        'https://so88ofhp4e.execute-api.ap-northeast-1.amazonaws.com/bookmarks'
-      )
-      setObjects(res.data.Items)
-    }
     fetchBookmarks()
+    setLoaded(true)
   }, [])
 
   const onFormOpen = (obj?: Bookmark): void => {
@@ -51,16 +55,22 @@ export default function App(): JSX.Element {
     setIsDeleteConfirmOpen(false)
   }
 
-  const list = objects.map(data => (
-    <Box mb={4} key={data.id}>
-      <LinkCard
-        object={data}
-        key={data.id}
-        onFormOpen={onFormOpen}
-        onDeleteConfirmOpen={onDeleteConfirmOpen}
-      />
-    </Box>
-  ))
+  const list = isLoaded
+    ? objects.map(data => (
+        <Box mb={4} key={data.id}>
+          <LinkCard
+            object={data}
+            key={data.id}
+            onFormOpen={onFormOpen}
+            onDeleteConfirmOpen={onDeleteConfirmOpen}
+          />
+        </Box>
+      ))
+    : [...Array(4)].map((_, i) => (
+        <Box mb={4} key={i}>
+          <Skeleton key={i} height={76.89} variant="rect" />
+        </Box>
+      ))
 
   return (
     <>
