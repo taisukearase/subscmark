@@ -1,9 +1,8 @@
 import { setDate, subMonths, isAfter, startOfDay, subWeeks } from 'date-fns'
 
-export const isRead = (lastReadDay?: string, type?: string, date?: number[]): boolean => {
-  if (lastReadDay === undefined) return false
-  const lastReadDateTime = new Date(lastReadDay)
-  return isAfter(lastReadDateTime, startOfDay(getLatestSubscDate(type, date)))
+export const isRead = (lastReadTime?: string, type?: string, date?: number[]): boolean => {
+  if (lastReadTime === undefined) return false
+  return isAfter(new Date(lastReadTime), startOfDay(getLatestSubscDate(type, date)))
 }
 
 const getLatestSubscDate = (type?: string, date?: number[]): Date => {
