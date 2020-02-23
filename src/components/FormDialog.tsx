@@ -24,6 +24,7 @@ type Props = {
   isOpen: boolean
   object?: Bookmark
   onFormClose: () => void
+  fetchBookmarks: () => Promise<void>
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -76,15 +77,16 @@ const defaultValue: FormData = {
 
 const FormDialog: React.FC<Props> = props => {
   const classes = useStyles()
-  const { isOpen, object, onFormClose } = props
+  const { isOpen, object, onFormClose, fetchBookmarks } = props
 
   const [formData, setFormData] = useState(defaultValue)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (!object) {
       return
     }
-    setFormData(() => ({ ...object }))
+    setFormData(() => ({ ...object, lastReadTime: null }))
   }, [object])
 
   const onChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>): void => {
@@ -97,6 +99,17 @@ const FormDialog: React.FC<Props> = props => {
     setFormData(prevState => ({ ...prevState, [name]: value }))
   }
 
+  const isInvalid = (): boolean => {
+    const { title, type, date } = formData
+    return (
+      title === '' ||
+      !isValidUrl ||
+      (['week', 'month'].indexOf(type) !== -1 ? (date?.length ?? 0) < 1 : type !== 'day')
+    )
+  }
+
+  const isValidUrl = formData.url.startsWith('http://') || formData.url.startsWith('https://')
+
   const clearState = (): void => {
     setFormData({ ...defaultValue })
   }
@@ -104,23 +117,18 @@ const FormDialog: React.FC<Props> = props => {
   const handleClose = (): void => {
     // 入力内容をクリアしてから閉じる
     clearState()
+    setIsLoading(false)
     onFormClose()
   }
 
-  const putFormData = async (): Promise<void> => {
-    await putBookmarks(formData)
-  }
-
-  const postFormData = async (): Promise<void> => {
-    await postBookmarks(formData)
-  }
-
-  const onSubmit = (): void => {
+  const onSubmit = async (): Promise<void> => {
+    setIsLoading(true)
     if (formData.id) {
-      putFormData()
+      await putBookmarks(formData)
     } else {
-      postFormData()
+      await postBookmarks(formData)
     }
+    await fetchBookmarks()
     handleClose()
   }
 
@@ -204,6 +212,7 @@ const FormDialog: React.FC<Props> = props => {
             value={formData.url}
             label="URL"
             type="text"
+            placeholder="http:// または https://"
             onChange={onChange}
             fullWidth
           />
@@ -234,8 +243,12 @@ const FormDialog: React.FC<Props> = props => {
             キャンセル
           </Button>
           <div style={{ flex: '1 0 0' }} />
-          <Button onClick={onSubmit} color="primary" variant="contained">
-            送信
+          <Button
+            disabled={isInvalid() || isLoading}
+            onClick={onSubmit}
+            color="primary"
+            variant="contained">
+            {isLoading ? '送信中' : '送信'}
           </Button>
         </DialogActions>
       </Dialog>

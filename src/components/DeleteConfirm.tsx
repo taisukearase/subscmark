@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import {
   Button,
@@ -14,6 +14,7 @@ import { deleteBookmarks } from '../logic/Api'
 type Props = {
   isOpen: boolean
   onClose: () => void
+  fetchBookmarks: () => Promise<void>
   object?: Bookmark
 }
 
@@ -25,7 +26,9 @@ const useStyles = makeStyles(() => ({
 
 const DeleteConfirm: React.FC<Props> = props => {
   const classes = useStyles()
-  const { isOpen, onClose, object } = props
+  const { isOpen, onClose, fetchBookmarks, object } = props
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const deleteItem = async (): Promise<void> => {
     if (!object?.id) {
@@ -33,10 +36,12 @@ const DeleteConfirm: React.FC<Props> = props => {
     }
     await deleteBookmarks(object.id)
   }
-  const onDelete = (): void => {
-    // TODO 削除して再描画
-    deleteItem()
+  const onDelete = async (): Promise<void> => {
+    setIsLoading(true)
+    await deleteItem()
+    await fetchBookmarks()
     onClose()
+    setIsLoading(false)
   }
 
   return (
@@ -59,8 +64,8 @@ const DeleteConfirm: React.FC<Props> = props => {
           キャンセル
         </Button>
         <div style={{ flex: '1 0 0' }} />
-        <Button onClick={onDelete} color="secondary" variant="contained">
-          削除
+        <Button onClick={onDelete} disabled={isLoading} color="secondary" variant="contained">
+          {isLoading ? '削除中' : '削除'}
         </Button>
       </DialogActions>
     </Dialog>

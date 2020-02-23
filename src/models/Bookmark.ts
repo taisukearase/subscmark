@@ -5,4 +5,5 @@ export interface Bookmark {
   type: string
   date?: number[]
   lastReadTime?: string
+  isRead?: boolean
 }

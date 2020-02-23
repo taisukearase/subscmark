@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Card, CardActionArea, CardContent, Typography, Menu, MenuItem } from '@material-ui/core'
 import {
@@ -9,7 +9,6 @@ import {
 
 import { format } from 'date-fns'
 import { Bookmark } from '../models'
-import { isRead } from '../logic/Date'
 import { putBookmarksReadTime } from '../logic/Api'
 
 const useStyles = makeStyles({
@@ -47,7 +46,7 @@ const LinkCard: React.FC<Props> = props => {
   }
 
   // object のプロパティの変更を感知できない？ので代用
-  const [date, setDate] = useState(object.lastReadTime)
+  const [isRead, setIsRead] = useState<boolean | undefined>(object.isRead)
   const putReadTime = async (readTime: string): Promise<void> => {
     await putBookmarksReadTime({
       id: object.id,
@@ -57,27 +56,22 @@ const LinkCard: React.FC<Props> = props => {
 
   const handleLinkClick = (): void => {
     const readTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss')
-    setDate(readTime)
+    setIsRead(true)
     putReadTime(readTime)
     window.open(object.url)
   }
 
-  const alert: string = useMemo(() => (isRead(date, object.type, object.date) ? '既読' : '未読'), [
-    date,
-    object.date,
-    object.type,
-  ])
+  const replacedUrl: string = object.url.replace(/(http(s?):\/\/)/, '')
 
   return (
-    <Card className={classes.card}>
+    <Card className={classes.card} style={isRead ? { opacity: 0.3 } : {}}>
       <CardActionArea className={classes.title} onClick={handleLinkClick}>
         <CardContent>
           <Typography variant="body2" component="h2" gutterBottom noWrap>
-            {alert}
             {object.title}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p" noWrap>
-            {object.url}
+            {replacedUrl}
           </Typography>
         </CardContent>
       </CardActionArea>
