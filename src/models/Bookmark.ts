@@ -4,5 +4,5 @@ export interface Bookmark {
   url: string
   type: string
   date?: number[]
-  lastReadDay?: string
+  lastReadTime?: string
 }
