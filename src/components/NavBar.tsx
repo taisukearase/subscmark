@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   title: {
     flexGrow: 1,
-    cursor: 'pointer',
   },
 }))
 
@@ -30,8 +29,10 @@ const NavBar: React.FC = () => {
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title} align="center" onClick={onReload}>
-            Subscmark
+          <Typography variant="h6" className={classes.title} align="center">
+            <span style={{ cursor: 'pointer' }} onClick={onReload}>
+              Subscmark
+            </span>
           </Typography>
           <Button color="inherit">Login</Button>
         </Toolbar>

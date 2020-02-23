@@ -35,6 +35,7 @@ const LinkCard: React.FC<Props> = props => {
   const classes = useStyles()
   const { object, onFormOpen, onDeleteConfirmOpen } = props
 
+  const [isRead, setIsRead] = useState<boolean | undefined>(object.isRead)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const isMenuOpen = Boolean(anchorEl)
 
@@ -45,8 +46,6 @@ const LinkCard: React.FC<Props> = props => {
     setAnchorEl(null)
   }
 
-  // object のプロパティの変更を感知できない？ので代用
-  const [isRead, setIsRead] = useState<boolean | undefined>(object.isRead)
   const putReadTime = async (readTime: string): Promise<void> => {
     await putBookmarksReadTime({
       id: object.id,
