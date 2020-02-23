@@ -96,6 +96,10 @@ const FormDialog: React.FC<Props> = props => {
     if (name === 'type' && value !== formData.type) {
       setFormData(prevState => ({ ...prevState, date: [] }))
     }
+    if (name === 'date' && Array.isArray(value)) {
+      setFormData(prevState => ({ ...prevState, date: value.sort((a, b) => a - b) }))
+      return
+    }
     setFormData(prevState => ({ ...prevState, [name]: value }))
   }
 
