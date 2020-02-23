@@ -10,6 +10,7 @@ import {
 import { format } from 'date-fns'
 import { Bookmark } from '../models'
 import { isRead } from '../logic/Date'
+import { putBookmarksReadTime } from '../logic/Api'
 
 const useStyles = makeStyles({
   card: {
@@ -46,10 +47,18 @@ const LinkCard: React.FC<Props> = props => {
   }
 
   // object のプロパティの変更を感知できない？ので代用
-  const [date, setDate] = useState(object.lastReadDay)
+  const [date, setDate] = useState(object.lastReadTime)
+  const putReadTime = async (readTime: string): Promise<void> => {
+    await putBookmarksReadTime({
+      id: object.id,
+      lastReadTime: readTime,
+    })
+  }
 
   const handleLinkClick = (): void => {
-    setDate(format(new Date(), 'yyyy-MM-dd HH:mm:ss'))
+    const readTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss')
+    setDate(readTime)
+    putReadTime(readTime)
     window.open(object.url)
   }
 

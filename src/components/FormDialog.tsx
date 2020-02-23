@@ -18,6 +18,7 @@ import {
   Input,
 } from '@material-ui/core'
 import { Bookmark } from '../models'
+import { putBookmarks, postBookmarks } from '../logic/Api'
 
 type Props = {
   isOpen: boolean
@@ -77,29 +78,27 @@ const FormDialog: React.FC<Props> = props => {
   const classes = useStyles()
   const { isOpen, object, onFormClose } = props
 
-  const [{ title, url, date, type }, setState] = useState(defaultValue)
+  const [formData, setFormData] = useState(defaultValue)
 
   useEffect(() => {
-    setState(() => ({
-      title: object?.title ?? '',
-      url: object?.url ?? '',
-      type: object?.type ?? '',
-      date: object?.date ?? [],
-    }))
+    if (!object) {
+      return
+    }
+    setFormData(() => ({ ...object }))
   }, [object])
 
   const onChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>): void => {
     const { value } = e.target
     const name = e.target.name as string
 
-    if (name === 'type' && value !== type) {
-      setState(prevState => ({ ...prevState, date: [] }))
+    if (name === 'type' && value !== formData.type) {
+      setFormData(prevState => ({ ...prevState, date: [] }))
     }
-    setState(prevState => ({ ...prevState, [name]: value }))
+    setFormData(prevState => ({ ...prevState, [name]: value }))
   }
 
   const clearState = (): void => {
-    setState({ ...defaultValue })
+    setFormData({ ...defaultValue })
   }
 
   const handleClose = (): void => {
@@ -108,14 +107,20 @@ const FormDialog: React.FC<Props> = props => {
     onFormClose()
   }
 
+  const putFormData = async (): Promise<void> => {
+    await putBookmarks(formData)
+  }
+
+  const postFormData = async (): Promise<void> => {
+    await postBookmarks(formData)
+  }
+
   const onSubmit = (): void => {
-    // TODO POST or PUT
-    console.log({
-      title,
-      url,
-      type,
-      date,
-    })
+    if (formData.id) {
+      putFormData()
+    } else {
+      postFormData()
+    }
     handleClose()
   }
 
@@ -126,7 +131,7 @@ const FormDialog: React.FC<Props> = props => {
   }
 
   const dateItems: DateItem[] =
-    type === 'week'
+    formData.type === 'week'
       ? ['日', '月', '火', '水', '木', '金', '土'].map((label, i) => ({
           id: i + 1,
           label,
@@ -139,17 +144,17 @@ const FormDialog: React.FC<Props> = props => {
         }))
 
   const DateSelector = (): JSX.Element | null => {
-    if (type !== 'week' && type !== 'month') {
+    if (formData.type !== 'week' && formData.type !== 'month') {
       return null
     }
     return (
       <FormControl className={classes.formControl}>
-        <InputLabel id="date_label">{type === 'week' ? '曜日' : '日付'}</InputLabel>
+        <InputLabel id="date_label">{formData.type === 'week' ? '曜日' : '日付'}</InputLabel>
         <Select
           labelId="date_label"
           id="date"
           multiple
-          value={date}
+          value={formData.date}
           name="date"
           onChange={onChange}
           input={<Input id="select-multi-chip" />}
@@ -187,7 +192,7 @@ const FormDialog: React.FC<Props> = props => {
             id="title"
             name="title"
             label="タイトル"
-            value={title}
+            value={formData.title}
             onChange={onChange}
             type="text"
             fullWidth
@@ -196,7 +201,7 @@ const FormDialog: React.FC<Props> = props => {
             margin="dense"
             id="url"
             name="url"
-            value={url}
+            value={formData.url}
             label="URL"
             type="text"
             onChange={onChange}
@@ -210,7 +215,7 @@ const FormDialog: React.FC<Props> = props => {
                   labelId="type"
                   id="type"
                   name="type"
-                  value={type}
+                  value={formData.type}
                   onChange={onChange}
                   autoWidth>
                   <MenuItem value="day">毎日</MenuItem>

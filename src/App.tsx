@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import { Container, Box, Fab } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import { makeStyles, Theme } from '@material-ui/core/styles'
@@ -10,6 +9,7 @@ import LinkCard from './components/LinkCard'
 import DeleteConfirm from './components/DeleteConfirm'
 import Copyright from './components/Copyright'
 import { Bookmark } from './models'
+import { getBookmarks } from './logic/Api'
 
 const useStyles = makeStyles((theme: Theme) => ({
   fab: {
@@ -28,15 +28,13 @@ export default function App(): JSX.Element {
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState<boolean>(false)
 
   const fetchBookmarks = async (): Promise<void> => {
-    const res = await axios.get(
-      'https://so88ofhp4e.execute-api.ap-northeast-1.amazonaws.com/bookmarks'
-    )
-    setObjects(res.data.Items)
+    const res = getBookmarks()
+    setObjects(res.Items)
+    setLoaded(true)
   }
 
   useEffect(() => {
     fetchBookmarks()
-    setLoaded(true)
   }, [])
 
   const onFormOpen = (obj?: Bookmark): void => {

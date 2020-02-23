@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from '@material-ui/core'
 import { Bookmark } from '../models'
+import { deleteBookmarks } from '../logic/Api'
 
 type Props = {
   isOpen: boolean
@@ -25,9 +26,16 @@ const useStyles = makeStyles(() => ({
 const DeleteConfirm: React.FC<Props> = props => {
   const classes = useStyles()
   const { isOpen, onClose, object } = props
+
+  const deleteItem = async (): Promise<void> => {
+    if (!object?.id) {
+      return
+    }
+    await deleteBookmarks(object.id)
+  }
   const onDelete = (): void => {
     // TODO 削除して再描画
-    console.log(object)
+    deleteItem()
     onClose()
   }
 
