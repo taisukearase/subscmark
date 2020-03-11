@@ -5,8 +5,10 @@ import { FormData } from '../models'
 const endpoint = 'https://so88ofhp4e.execute-api.ap-northeast-1.amazonaws.com'
 const getResponseData = ({ data }: AxiosResponse<any>): any => data
 
+axios.defaults.withCredentials = true
+
 export const getBookmarks = (): any => {
-  return axios.get(`${endpoint}/bookmarks`, { withCredentials: true }).then(getResponseData)
+  return axios.get(`${endpoint}/bookmarks`).then(getResponseData)
 }
 
 export const postBookmarks = (params: FormData): any => {
