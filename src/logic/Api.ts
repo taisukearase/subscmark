@@ -6,7 +6,7 @@ const endpoint = 'https://ravk8kt5vh.execute-api.ap-northeast-1.amazonaws.com/be
 const getResponseData = ({ data }: AxiosResponse<any>): any => data
 
 export const getBookmarks = (): any => {
-  return axios.get(`${endpoint}/bookmarks`).then(getResponseData)
+  return axios.get(`${endpoint}/bookmarks`, { withCredentials: true }).then(getResponseData)
 }
 
 export const postBookmarks = (params: FormData): any => {
