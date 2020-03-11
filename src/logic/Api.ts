@@ -2,6 +2,8 @@
 import axios, { AxiosResponse } from 'axios'
 import { FormData } from '../models'
 
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+
 const endpoint = 'https://so88ofhp4e.execute-api.ap-northeast-1.amazonaws.com'
 const getResponseData = ({ data }: AxiosResponse<any>): any => data
 
