@@ -2,12 +2,6 @@
 import axios, { AxiosResponse } from 'axios'
 import { FormData } from '../models'
 
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
-axios.defaults.headers.common['Content-Type'] = 'application/json;charset=utf-8'
-axios.defaults.headers.common['Access-Control-Allow-Headers'] = '*'
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'https://subscmark.netlify.com'
-axios.defaults.headers.Accept = 'application/json'
-
 const endpoint = 'https://so88ofhp4e.execute-api.ap-northeast-1.amazonaws.com'
 const getResponseData = ({ data }: AxiosResponse<any>): any => data
 
