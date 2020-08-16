@@ -17,7 +17,7 @@ import {
   Chip,
   Input,
 } from '@material-ui/core'
-import { Bookmark } from '../models'
+import { Bookmark, FormData } from '../models'
 import { putBookmarks, postBookmarks } from '../logic/Api'
 
 type Props = {
@@ -60,14 +60,6 @@ const MenuProps = {
   },
 }
 
-interface FormData {
-  id?: number | null
-  title: string
-  url: string
-  type: string
-  date?: number[]
-}
-
 const defaultValue: FormData = {
   title: '',
   url: '',
@@ -86,7 +78,8 @@ const FormDialog: React.FC<Props> = props => {
     if (!object) {
       return
     }
-    setFormData(() => ({ ...object, lastReadTime: null }))
+    const { id, title, url, type, date } = object
+    setFormData({ id, title, url, type, date })
   }, [object])
 
   const onChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>): void => {
