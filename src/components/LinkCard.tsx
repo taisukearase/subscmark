@@ -60,7 +60,7 @@ const LinkCard: React.FC<Props> = props => {
     window.open(object.url)
   }
 
-  const replacedUrl: string = object.url.replace(/(http(s?):\/\/)/, '')
+  const replacedUrl: string = object?.url?.replace(/(http(s?):\/\/)/, '')
 
   return (
     <Card className={classes.card} style={isRead ? { opacity: 0.3 } : {}}>
