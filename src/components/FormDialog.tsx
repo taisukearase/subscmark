@@ -76,6 +76,8 @@ const FormDialog: React.FC<Props> = props => {
 
   useEffect(() => {
     if (!object) {
+      // object を初期化した際に入力値も初期化する
+      clearState()
       return
     }
     const { id, title, url, type, date } = object

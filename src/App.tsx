@@ -51,6 +51,7 @@ export default function App(): JSX.Element {
     setIsDeleteConfirmOpen(true)
   }
   const onDeleteConfirmClose = (): void => {
+    setObject(undefined)
     setIsDeleteConfirmOpen(false)
   }
 
