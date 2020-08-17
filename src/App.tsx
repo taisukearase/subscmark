@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Box, Fab, Divider } from '@material-ui/core'
+import { Container, Box, Fab, Divider, Typography } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { Add as AddIcon } from '@material-ui/icons'
+import { Add as AddIcon, Bookmarks as BookmarksIcon } from '@material-ui/icons'
 import NavBar from './components/NavBar'
 import FormDialog from './components/FormDialog'
 import LinkCard from './components/LinkCard'
@@ -18,6 +18,21 @@ const useStyles = makeStyles((theme: Theme) => ({
     bottom: theme.spacing(2),
     right: theme.spacing(2),
   },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 'calc(100vh - 64px)',
+  },
+  footer: {
+    marginTop: 'auto',
+  },
+  bookmarkIcon: {
+    height: 100,
+    width: 100,
+  },
+  emptyText: {
+    fontStyle: 'italic',
+  },
 }))
 
 export default function App(): JSX.Element {
@@ -30,7 +45,9 @@ export default function App(): JSX.Element {
 
   const fetchBookmarks = async (): Promise<void> => {
     const res = await getBookmarks()
-    setObjects(res.Items)
+    if (!res.userCd) {
+      setObjects(res.Items)
+    }
     setLoaded(true)
   }
 
@@ -90,12 +107,29 @@ export default function App(): JSX.Element {
     </Box>
   ))
 
+  const empty = (
+    <>
+      <Box mt={15} mb={5} alignItems="center" justifyContent="center" display="flex">
+        <BookmarksIcon className={classes.bookmarkIcon} color="disabled" />
+      </Box>
+      <Typography
+        variant="body2"
+        color="textSecondary"
+        align="center"
+        className={classes.emptyText}>
+        No Subscmarks
+      </Typography>
+    </>
+  )
+
+  const result = objects.length ? [unreadObjects, border, readObjects] : empty
+
   return (
     <>
       <NavBar />
-      <Container maxWidth="sm">
-        <Box my={4}>
-          {isLoaded ? [unreadObjects, border, readObjects] : skeletons}
+      <Container maxWidth="sm" className={classes.container}>
+        <Box my={4}>{isLoaded ? result : skeletons}</Box>
+        <Box mb={5} className={classes.footer}>
           <Copyright />
         </Box>
       </Container>
