@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Box, Fab, Divider, Typography } from '@material-ui/core'
+import { Container, Box, Fab, Divider, Typography, Button } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { Add as AddIcon, Bookmarks as BookmarksIcon } from '@material-ui/icons'
@@ -119,6 +119,16 @@ export default function App(): JSX.Element {
         className={classes.emptyText}>
         No Subscmarks
       </Typography>
+      <Box my={4} alignItems="center" justifyContent="center" display="flex">
+        <Button
+          onClick={(): void => {
+            onFormOpen()
+          }}
+          color="primary"
+          variant="contained">
+          ブックマークを登録する
+        </Button>
+      </Box>
     </>
   )
 
