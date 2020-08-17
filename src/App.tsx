@@ -107,7 +107,7 @@ export default function App(): JSX.Element {
     </Box>
   ))
 
-  const empty = (
+  const blankSlate = (
     <>
       <Box mt={15} mb={5} alignItems="center" justifyContent="center" display="flex">
         <BookmarksIcon className={classes.bookmarkIcon} color="disabled" />
@@ -122,13 +122,13 @@ export default function App(): JSX.Element {
     </>
   )
 
-  const result = objects.length ? [unreadObjects, border, readObjects] : empty
+  const contents = objects.length ? [unreadObjects, border, readObjects] : blankSlate
 
   return (
     <>
       <NavBar />
       <Container maxWidth="sm" className={classes.container}>
-        <Box my={4}>{isLoaded ? result : skeletons}</Box>
+        <Box my={4}>{isLoaded ? contents : skeletons}</Box>
         <Box mb={5} className={classes.footer}>
           <Copyright />
         </Box>
