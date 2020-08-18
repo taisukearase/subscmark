@@ -18,11 +18,11 @@ type Props = {
   object?: Bookmark
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
   leftAlignDialogActions: {
     justifyContent: 'flex-start',
   },
-}))
+})
 
 const DeleteConfirm: React.FC<Props> = props => {
   const classes = useStyles()

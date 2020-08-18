@@ -1,9 +1,9 @@
 import React from 'react'
-import { makeStyles, Theme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import { Typography, Button, Box } from '@material-ui/core'
 import { Bookmarks as BookmarksIcon } from '@material-ui/icons'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
   bookmarksIcon: {
     height: 100,
     width: 100,
@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
   emptyText: {
     fontStyle: 'italic',
   },
-}))
+})
 
 type Props = {
   onFormOpen: () => void
