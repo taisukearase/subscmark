@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Box, Fab, Divider, Typography, Button } from '@material-ui/core'
+import { Container, Box, Fab, Divider } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import { makeStyles, Theme } from '@material-ui/core/styles'
-import { Add as AddIcon, Bookmarks as BookmarksIcon } from '@material-ui/icons'
+import { Add as AddIcon } from '@material-ui/icons'
 import NavBar from './components/NavBar'
 import FormDialog from './components/FormDialog'
 import LinkCard from './components/LinkCard'
 import DeleteConfirm from './components/DeleteConfirm'
+import BlankSlate from './components/BlankSlate'
 import Copyright from './components/Copyright'
 import { Bookmark } from './models'
 import { getBookmarks } from './logic/Api'
@@ -25,13 +26,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   footer: {
     marginTop: 'auto',
-  },
-  bookmarkIcon: {
-    height: 100,
-    width: 100,
-  },
-  emptyText: {
-    fontStyle: 'italic',
   },
 }))
 
@@ -107,32 +101,15 @@ export default function App(): JSX.Element {
     </Box>
   ))
 
-  const blankSlate = (
-    <>
-      <Box mt={15} mb={5} alignItems="center" justifyContent="center" display="flex">
-        <BookmarksIcon className={classes.bookmarkIcon} color="disabled" />
-      </Box>
-      <Typography
-        variant="body2"
-        color="textSecondary"
-        align="center"
-        className={classes.emptyText}>
-        No Subscmarks
-      </Typography>
-      <Box my={4} alignItems="center" justifyContent="center" display="flex">
-        <Button
-          onClick={(): void => {
-            onFormOpen()
-          }}
-          color="primary"
-          variant="contained">
-          ブックマークを登録する
-        </Button>
-      </Box>
-    </>
+  const contents = objects.length ? (
+    [unreadObjects, border, readObjects]
+  ) : (
+    <BlankSlate
+      onFormOpen={(): void => {
+        onFormOpen()
+      }}
+    />
   )
-
-  const contents = objects.length ? [unreadObjects, border, readObjects] : blankSlate
 
   return (
     <>
