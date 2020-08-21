@@ -16,8 +16,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }))
 
-const NavBar: React.FC = () => {
+type Props = {
+  onSettingOpen: () => void
+}
+
+const NavBar: React.FC<Props> = props => {
   const classes = useStyles()
+  const { onSettingOpen } = props
 
   const onReload = (): void => {
     window.location.reload()
@@ -32,7 +37,12 @@ const NavBar: React.FC = () => {
               Subscmark
             </span>
           </Typography>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton
+            onClick={onSettingOpen}
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu">
             <MenuIcon />
           </IconButton>
         </Toolbar>

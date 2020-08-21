@@ -7,8 +7,12 @@ const getResponseData = ({ data }: AxiosResponse<any>): any => data
 
 axios.defaults.withCredentials = true
 
-export const getBookmarks = (): any => {
-  return axios.get(`${endpoint}/bookmarks`).then(getResponseData)
+export const postUser = (params: { userCd: string | null | false }): any => {
+  return axios.post(`${endpoint}/user`, params).then(getResponseData)
+}
+
+export const putUser = (params: { userCd: string | null | false }): any => {
+  return axios.put(`${endpoint}/user`, params).then(getResponseData)
 }
 
 export const postBookmarks = (params: FormData): any => {

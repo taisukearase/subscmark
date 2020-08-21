@@ -10,8 +10,10 @@ import DeleteConfirm from './components/DeleteConfirm'
 import BlankSlate from './components/BlankSlate'
 import Copyright from './components/Copyright'
 import { Bookmark } from './models'
-import { getBookmarks } from './logic/Api'
+import { postUser, putUser } from './logic/Api'
 import { isRead } from './logic/Date'
+import * as storage from './logic/Storage'
+import SettingDialog from './components/SettingDialog'
 
 const useStyles = makeStyles((theme: Theme) => ({
   fab: {
@@ -36,10 +38,15 @@ export default function App(): JSX.Element {
   const [object, setObject] = useState<Bookmark | undefined>(undefined)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState<boolean>(false)
+  const [isSettingOpen, setIsSettingOpen] = useState<boolean>(false)
 
   const fetchBookmarks = async (): Promise<void> => {
-    const res = await getBookmarks()
-    if (!res.userCd) {
+    const userCd = storage.getUserCd()
+    const res = await postUser({ userCd })
+    if (res.userCd) {
+      storage.setUserCd(res.userCd)
+    }
+    if (res.Items) {
       setObjects(res.Items)
     }
     setLoaded(true)
@@ -64,6 +71,21 @@ export default function App(): JSX.Element {
   const onDeleteConfirmClose = (): void => {
     setObject(undefined)
     setIsDeleteConfirmOpen(false)
+  }
+  const onSettingOpen = (): void => {
+    setIsSettingOpen(true)
+  }
+  const onSettingClose = (): void => {
+    setIsSettingOpen(false)
+  }
+  const restoreUser = async (userCd: string): Promise<void> => {
+    const res = await putUser({ userCd })
+    if (res.userCd) {
+      storage.setUserCd(res.userCd)
+    }
+    if (res.Items) {
+      setObjects(res.Items)
+    }
   }
 
   const sortedObjects = objects
@@ -97,7 +119,7 @@ export default function App(): JSX.Element {
 
   const skeletons = [...Array(4)].map((_, i) => (
     <Box mb={4} key={i}>
-      <Skeleton key={i} height={76.89} variant="rect" />
+      <Skeleton key={i} height={76.89} variant="rect" animation="wave" />
     </Box>
   ))
 
@@ -113,7 +135,7 @@ export default function App(): JSX.Element {
 
   return (
     <>
-      <NavBar />
+      <NavBar onSettingOpen={onSettingOpen} />
       <Container maxWidth="sm" className={classes.container}>
         <Box my={4}>{isLoaded ? contents : skeletons}</Box>
         <Box mb={5} className={classes.footer}>
@@ -140,6 +162,11 @@ export default function App(): JSX.Element {
         onClose={onDeleteConfirmClose}
         fetchBookmarks={fetchBookmarks}
         object={object}
+      />
+      <SettingDialog
+        isOpen={isSettingOpen}
+        onFormClose={onSettingClose}
+        restoreUser={restoreUser}
       />
     </>
   )
