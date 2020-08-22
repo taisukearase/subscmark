@@ -86,6 +86,14 @@ const SettingDialog: React.FC<Props> = props => {
   }
 
   const onLogout = async (): Promise<void> => {
+    if (
+      // eslint-disable-next-line no-alert
+      !window.confirm(
+        'ログアウトすると、現在のブックマークIDは確認できなくなります。\n\nログアウトしてもよろしいですか？'
+      )
+    ) {
+      return
+    }
     setIsLogouting(true)
     try {
       await loginUser(true)
