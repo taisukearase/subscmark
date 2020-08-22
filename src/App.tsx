@@ -40,20 +40,18 @@ export default function App(): JSX.Element {
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState<boolean>(false)
   const [isSettingOpen, setIsSettingOpen] = useState<boolean>(false)
 
-  const fetchBookmarks = async (): Promise<void> => {
-    const userCd = storage.getUserCd()
+  const loginUser = async (isLogout = false): Promise<void> => {
+    const userCd = isLogout ? null : storage.getUserCd()
     const res = await postUser({ userCd })
     if (res.userCd) {
       storage.setUserCd(res.userCd)
     }
-    if (res.Items) {
-      setObjects(res.Items)
-    }
+    setObjects(res.Items || [])
     setLoaded(true)
   }
 
   useEffect(() => {
-    fetchBookmarks()
+    loginUser()
   }, [])
 
   const onFormOpen = (obj?: Bookmark): void => {
@@ -154,19 +152,20 @@ export default function App(): JSX.Element {
       <FormDialog
         isOpen={isFormOpen}
         onFormClose={onFormClose}
-        fetchBookmarks={fetchBookmarks}
+        loginUser={loginUser}
         object={object}
       />
       <DeleteConfirm
         isOpen={isDeleteConfirmOpen}
         onClose={onDeleteConfirmClose}
-        fetchBookmarks={fetchBookmarks}
+        loginUser={loginUser}
         object={object}
       />
       <SettingDialog
         isOpen={isSettingOpen}
         onFormClose={onSettingClose}
         restoreUser={restoreUser}
+        loginUser={loginUser}
       />
     </>
   )

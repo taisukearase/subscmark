@@ -14,7 +14,7 @@ import { deleteBookmarks } from '../logic/Api'
 type Props = {
   isOpen: boolean
   onClose: () => void
-  fetchBookmarks: () => Promise<void>
+  loginUser: () => Promise<void>
   object?: Bookmark
 }
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 
 const DeleteConfirm: React.FC<Props> = props => {
   const classes = useStyles()
-  const { isOpen, onClose, fetchBookmarks, object } = props
+  const { isOpen, onClose, loginUser, object } = props
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -39,7 +39,7 @@ const DeleteConfirm: React.FC<Props> = props => {
   const onDelete = async (): Promise<void> => {
     setIsLoading(true)
     await deleteItem()
-    await fetchBookmarks()
+    await loginUser()
     onClose()
     setIsLoading(false)
   }

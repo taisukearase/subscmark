@@ -24,7 +24,7 @@ type Props = {
   isOpen: boolean
   object?: Bookmark
   onFormClose: () => void
-  fetchBookmarks: () => Promise<void>
+  loginUser: () => Promise<void>
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -69,7 +69,7 @@ const defaultValue: FormData = {
 
 const FormDialog: React.FC<Props> = props => {
   const classes = useStyles()
-  const { isOpen, object, onFormClose, fetchBookmarks } = props
+  const { isOpen, object, onFormClose, loginUser } = props
 
   const [formData, setFormData] = useState(defaultValue)
   const [isLoading, setIsLoading] = useState(false)
@@ -127,7 +127,7 @@ const FormDialog: React.FC<Props> = props => {
     } else {
       await postBookmarks(formData)
     }
-    await fetchBookmarks()
+    await loginUser()
     handleClose()
   }
 
