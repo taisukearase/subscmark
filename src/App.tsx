@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Box, Fab, Divider } from '@material-ui/core'
+import { Container, Box, Fab, Divider, Card, CardContent } from '@material-ui/core'
 import { Skeleton } from '@material-ui/lab'
 import { makeStyles, Theme } from '@material-ui/core/styles'
 import { Add as AddIcon } from '@material-ui/icons'
@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   footer: {
     marginTop: 'auto',
+  },
+  card: {
+    height: '76.8906px',
   },
 }))
 
@@ -117,7 +120,12 @@ export default function App(): JSX.Element {
 
   const skeletons = [...Array(4)].map((_, i) => (
     <Box mb={4} key={i}>
-      <Skeleton key={i} height={76.89} variant="rect" animation="wave" />
+      <Card className={classes.card}>
+        <CardContent>
+          <Skeleton animation="wave" height={20} width="40%" style={{ marginBottom: 9 }} />
+          <Skeleton animation="wave" height={15} width="70%" />
+        </CardContent>
+      </Card>
     </Box>
   ))
 
