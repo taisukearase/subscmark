@@ -2,7 +2,7 @@
 import axios, { AxiosResponse } from 'axios'
 import { FormData } from '../models'
 
-const endpoint = 'https://so88ofhp4e.execute-api.ap-northeast-1.amazonaws.com'
+const endpoint = process.env.REACT_APP_API_ENDPOINT
 const getResponseData = ({ data }: AxiosResponse<any>): any => data
 
 axios.defaults.withCredentials = true
