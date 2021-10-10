@@ -17,7 +17,7 @@ type Props = {
   onFormOpen: () => void
 }
 
-const BlankSlate: React.FC<Props> = props => {
+const BlankSlate: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { onFormOpen } = props
 

@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   },
 })
 
-const DeleteConfirm: React.FC<Props> = props => {
+const DeleteConfirm: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { isOpen, onClose, loginUser, object } = props
 

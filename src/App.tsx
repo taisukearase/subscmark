@@ -90,7 +90,7 @@ export default function App(): JSX.Element {
   }
 
   const sortedObjects = objects
-    .map(obj => ({
+    .map((obj) => ({
       ...obj,
       isRead: isRead(obj?.lastReadTime, obj?.type, obj?.date),
     }))
@@ -107,9 +107,9 @@ export default function App(): JSX.Element {
     </Box>
   )
 
-  const readObjects = sortedObjects.filter(obj => obj.isRead).map(linkCard)
+  const readObjects = sortedObjects.filter((obj) => obj.isRead).map(linkCard)
 
-  const unreadObjects = sortedObjects.filter(obj => !obj.isRead).map(linkCard)
+  const unreadObjects = sortedObjects.filter((obj) => !obj.isRead).map(linkCard)
 
   const border =
     readObjects.length && unreadObjects.length ? (

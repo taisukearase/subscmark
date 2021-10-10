@@ -20,7 +20,7 @@ type Props = {
   onSettingOpen: () => void
 }
 
-const NavBar: React.FC<Props> = props => {
+const NavBar: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { onSettingOpen } = props
 

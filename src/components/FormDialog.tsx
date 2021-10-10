@@ -67,12 +67,16 @@ const defaultValue: FormData = {
   date: [],
 }
 
-const FormDialog: React.FC<Props> = props => {
+const FormDialog: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { isOpen, object, onFormClose, loginUser } = props
 
   const [formData, setFormData] = useState(defaultValue)
   const [isLoading, setIsLoading] = useState(false)
+
+  const clearState = (): void => {
+    setFormData({ ...defaultValue })
+  }
 
   useEffect(() => {
     if (!object) {
@@ -89,14 +93,16 @@ const FormDialog: React.FC<Props> = props => {
     const name = e.target.name as string
 
     if (name === 'type' && value !== formData.type) {
-      setFormData(prevState => ({ ...prevState, date: [] }))
+      setFormData((prevState) => ({ ...prevState, date: [] }))
     }
     if (name === 'date' && Array.isArray(value)) {
-      setFormData(prevState => ({ ...prevState, date: value.sort((a, b) => a - b) }))
+      setFormData((prevState) => ({ ...prevState, date: value.sort((a, b) => a - b) }))
       return
     }
-    setFormData(prevState => ({ ...prevState, [name]: value }))
+    setFormData((prevState) => ({ ...prevState, [name]: value }))
   }
+
+  const isValidUrl = formData.url.startsWith('http://') || formData.url.startsWith('https://')
 
   const isInvalid = (): boolean => {
     const { title, type, date } = formData
@@ -105,12 +111,6 @@ const FormDialog: React.FC<Props> = props => {
       !isValidUrl ||
       (['week', 'month'].indexOf(type) !== -1 ? (date?.length ?? 0) < 1 : type !== 'day')
     )
-  }
-
-  const isValidUrl = formData.url.startsWith('http://') || formData.url.startsWith('https://')
-
-  const clearState = (): void => {
-    setFormData({ ...defaultValue })
   }
 
   const handleClose = (): void => {
@@ -167,14 +167,14 @@ const FormDialog: React.FC<Props> = props => {
           input={<Input id="select-multi-chip" />}
           renderValue={(selected): JSX.Element => (
             <div className={classes.chips}>
-              {(selected as string[]).map(value => {
-                const selectedItem = dateItems.find(item => item.value === value)
+              {(selected as string[]).map((value) => {
+                const selectedItem = dateItems.find((item) => item.value === value)
                 return <Chip key={value} label={selectedItem?.label} className={classes.chip} />
               })}
             </div>
           )}
           MenuProps={MenuProps}>
-          {dateItems.map(item => (
+          {dateItems.map((item) => (
             <MenuItem value={item.value} key={item.id}>
               {item.label}
             </MenuItem>

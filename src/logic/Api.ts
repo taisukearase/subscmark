@@ -5,7 +5,7 @@ import { FormData } from '../models'
 const endpoint = process.env.REACT_APP_API_ENDPOINT
 const token = process.env.REACT_APP_API_TOKEN
 axios.defaults.withCredentials = true
-axios.defaults.headers.common.Authorization = `Bearer ${token}`
+axios.defaults.headers = { Authorization: `Bearer ${token}` }
 
 const getResponseData = ({ data }: AxiosResponse<any>): any => data
 

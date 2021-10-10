@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }))
 
-const SettingDialog: React.FC<Props> = props => {
+const SettingDialog: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { isOpen, onFormClose, restoreUser, loginUser } = props
 
