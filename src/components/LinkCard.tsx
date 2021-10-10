@@ -31,7 +31,7 @@ type Props = {
   onDeleteConfirmOpen: (object: Bookmark) => void
 }
 
-const LinkCard: React.FC<Props> = props => {
+const LinkCard: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { object, onFormOpen, onDeleteConfirmOpen } = props
 
