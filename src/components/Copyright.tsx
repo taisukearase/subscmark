@@ -3,11 +3,10 @@ import { Typography, Link } from '@material-ui/core'
 
 const Copyright: React.FC = () => (
   <Typography variant="body2" color="textSecondary" align="center">
-    Copyright ©
-    <Link color="inherit" href="https://material-ui.com/">
-      Your Website
-    </Link>{' '}
-    {new Date().getFullYear()}.
+    Copyright © {new Date().getFullYear()}{' '}
+    <Link color="inherit" href="https://github.com/taisukearase/subscmark">
+      taisukearase
+    </Link>
   </Typography>
 )
 
