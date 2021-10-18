@@ -22,6 +22,7 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src"
+    "src",
+    "test/App.test.tsx"
   ]
 }
